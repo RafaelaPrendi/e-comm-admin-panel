@@ -1,8 +1,16 @@
 import React from "react";
 import "./Header.scss";
 import { Link, NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { signout } from "../../actions";
+
 
 const Header = () => {
+  const auth = useSelector(state => state.auth);
+  const dispatch = useDispatch();
+  const handleSignOut = () => {
+    dispatch(signout());
+  }
   return (
     <nav className="navbar">
       <Link to="/" className="title">
@@ -10,12 +18,15 @@ const Header = () => {
         AL-SHOP Admin
       </Link>
       <ul className="nav-links">
-        <NavLink className="nav-item" to={"/signin"}>
+       {auth.authenticate ?  <NavLink className="nav-item font-bold" to={"/signout"} onClick={handleSignOut}>
+          Dil
+        </NavLink>:<NavLink className="nav-item font-bold" to={"/signin"}>
           Hyr
-        </NavLink>
-        <NavLink className="nav-item" to={"/signup"}>
+        </NavLink>}
+
+        {!auth.authenticate && <NavLink className="nav-item font-bold" to={"/signup"}>
           Regjistrohu
-        </NavLink>
+        </NavLink>}
       </ul>
     </nav>
   );

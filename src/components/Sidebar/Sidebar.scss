@@ -1,0 +1,29 @@
+.sidebarContainer{
+    top: 25%;
+    padding: 20px 5px 0px 20px;
+    width: 100%;
+    height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+    color: #16c79a;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    gap: 20px;
+    ul{
+        align-self: center;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        gap: 10px;
+        button{
+            font-size: large;
+        }
+    }
+
+}
+.hamburger{
+    padding-left: 60px;
+}
