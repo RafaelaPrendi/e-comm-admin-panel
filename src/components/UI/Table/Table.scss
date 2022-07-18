@@ -1,0 +1,19 @@
+/* scrolltable rules */
+table {
+  margin-top: 20px;
+  display: inline-block;
+  overflow: auto;
+  height: 60vh;
+}
+th div {
+  margin-top: -20px;
+  position: absolute;
+}
+
+/* design */
+table {
+  border-collapse: collapse;
+}
+tr:nth-child(even) {
+  background: #eee;
+}

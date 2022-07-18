@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import Input from "../../components/UI/Input/Input";
 import "./SignIn.scss";
@@ -34,7 +34,6 @@ const SignIn = (props) => {
       dispatch(login(user));
       const loggeduser = localStorage.getItem("user", JSON.stringify(user));
       console.log("logged=", loggeduser);
-
     } else {
       email.length > 0 && !password.length > 0 && setError("password empty!");
       !email.length > 0 && password.length > 0 && setError("email empty!");
@@ -51,7 +50,7 @@ const SignIn = (props) => {
   //       text: "Pati nje gabim ne kycje!",
   //       timer: 2000,
   //     });
-  
+
   // }, [auth]);
   if (auth.authenticate) {
     return <Redirect to={`/`} />;

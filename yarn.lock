@@ -11130,11 +11130,6 @@
     "unquote" "~1.1.1"
     "util.promisify" "~1.0.0"
 
-"swal-forms@^0.5.0":
-  "integrity" "sha1-FLUV8UVFzr4/vGO3golBOaICtHU="
-  "resolved" "https://registry.npmjs.org/swal-forms/-/swal-forms-0.5.0.tgz"
-  "version" "0.5.0"
-
 "sweetalert2@^11.4.4":
   "integrity" "sha512-9yYWQuRT1v9JNI/paPTSYV+68MHwe9C+HQ/I2jtfaFzoJgYRftWXOs4JqmDSjT7m2m4r8ebMMn8LcxD1Wq9B/w=="
   "resolved" "https://registry.npmjs.org/sweetalert2/-/sweetalert2-11.4.4.tgz"
