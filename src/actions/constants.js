@@ -30,3 +30,6 @@ export const categoryConstants = {
   DELETE_CATEGORY_SUCCESS: "DELETE_CATEGORY_REQUEST",
   DELETE_CATEGORY_FAILURE: "DELETE_CATEGORY_FAILURE",
 };
+export const CATEGORY = "CATEGORY"
+export const PRODUCT = "PRODUCT"
+export const ORDER = "ORDER"

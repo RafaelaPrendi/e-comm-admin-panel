@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { IoAddOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCategory, getAllCategories } from "../../actions";
+import { deleteCategory, getAllCategories, getCategoriesPaginate } from "../../actions";
 import Layout from "../../components/Layout/Layout";
 import Table from "../../components/UI/Table/Table";
 import Swal from "sweetalert2";
 import "./Categories.scss";
 import NewCategory from "./NewCategory";
+import { CATEGORY } from "../../actions/constants";
 
 const Categories = () => {
   const dispatch = useDispatch();
@@ -17,12 +18,18 @@ const Categories = () => {
     parentId: "",
   };
 
+  useEffect(()=> {
+    dispatch(getAllCategories());
+  }, [dispatch]);
+
   const categories = useSelector((state) => state.category.categories);
   console.log(categories, "categories");
 
   const [newCategory, setNewCategory] = useState(initCategory);
   const [editCategory, setEditCategory] = useState(initCategory);
-  const [showModal, setShowModal] = React.useState(false);
+  const [showModal, setShowModal] = useState(false);
+  // const [currentItems, setCurrentItems] = useState([]);
+
 
   const handleAddCategory = () => {
     setNewCategory(initCategory);
@@ -75,16 +82,23 @@ const Categories = () => {
               <IoAddOutline size={30} color="white" className="ml-2" />
             </button>
           </div>
-          <div className="flex flex-row mt-4">
+          <div className="flex flex-col mt-4">
             {categories.length > 0 ? (
               <Table
                 colHeader={["#", "Emri", "Nen Kategori"]}
                 data={categories}
+                dataType={CATEGORY}
                 showDetailsColumn={false}
                 setShowModal={setShowModal}
                 isCategoryData={true}
                 handleDeleteItem={handleDeleteCategory}
                 handleEditItem={handleEditCategory}
+                handlePagination={getCategoriesPaginate}
+                // currentPage={currentPage}
+                // itemsPerPage={itemsPerPage}
+                // totalItems={currentItems.length}
+                // paginateBack={paginateBack}
+                // paginateFront={paginateFront}
               />
             ) : (
               <h2 className="text-center text-red">Error fetching data.</h2>

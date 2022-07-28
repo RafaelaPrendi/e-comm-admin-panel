@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { AiFillDelete, AiFillEye } from "react-icons/ai";
 import { BsFillPencilFill } from "react-icons/bs";
 import "./Table.scss";
+import Pagination from "../Pagination";
+import { CATEGORY, ORDER, PRODUCT } from "../../../actions/constants";
+import { useDispatch, useSelector } from "react-redux";
+
 
 const Table = (props) => {
   const {
@@ -12,9 +16,36 @@ const Table = (props) => {
     isCategoryData,
     handleDeleteItem,
     handleEditItem,
+    dataType,
   } = props;
   const [searchTerm, setSearchTerm] = useState("");
   const [tableData, setTableData] = useState([]);
+  const dispatch = useDispatch();
+
+
+    //manage pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(5);
+    // Get current posts
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+      // Change page
+    const paginateFront = () => setCurrentPage(currentPage + 1);
+    const paginateBack = () => setCurrentPage(currentPage - 1);
+  
+    const getMoreItems = () => {
+      if(dataType === CATEGORY){
+
+        dispatch()
+        setTableData
+      }else if(dataType === PRODUCT){
+
+      }else if(dataType === ORDER){
+
+      }
+    }
+    console.log("current page=", currentPage, "curr itm=", currentItems, "items per page", itemsPerPage )
 
   useEffect(() => {
     const filtered = data.filter((item) => {
@@ -132,59 +163,73 @@ const Table = (props) => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                {tableData.map((item, index) => {
-                  return (
-                    <tr
-                      className="hover:bg-gray-100 dark:hover:bg-gray-700"
-                      key={index}
-                    >
-                      {Object.keys(item).map((key) => {
-                        return (
-                          <td
-                            className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                            key={Math.random()}
-                          >
-                            {isCategoryData
-                              ? renderSubCategories(item, key, index)
-                              : key === "_id"
-                              ? index + 1
-                              : item[key]}
+                {currentItems.length > 0 ? (
+                  currentItems.map((item, index) => {
+                    return (
+                      <tr
+                        className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                        key={index}
+                      >
+                        {Object.keys(item).map((key) => {
+                          return (
+                            <td
+                              className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                              key={Math.random()}
+                            >
+                              {isCategoryData
+                                ? renderSubCategories(item, key, index)
+                                : key === "_id"
+                                ? index + 1
+                                : item[key]}
+                            </td>
+                          );
+                        })}
+                        {showDetailsColumn && (
+                          <td className="py-4 px-6 text-sm font-medium whitespace-nowrap mr-auto ml-auto">
+                            <button
+                              className="text-blue-600 dark:text-blue-500 hover:underline ml-2 mr-2 inline-flex items-center"
+                              onClick={() => {
+                                setShowModal(true);
+                              }}
+                            >
+                              <AiFillEye color="black" />
+                            </button>
                           </td>
-                        );
-                      })}
-                      {showDetailsColumn && (
+                        )}
                         <td className="py-4 px-6 text-sm font-medium whitespace-nowrap mr-auto ml-auto">
                           <button
-                            className="text-blue-600 dark:text-blue-500 hover:underline ml-2 mr-2 inline-flex items-center"
-                            onClick={() => {
-                              setShowModal(true);
-                            }}
+                            className="text-blue-600 dark:text-blue-500 hover:underline ml-2 mr-2"
+                            onClick={() => handleEditItem(item)}
                           >
-                            <AiFillEye color="black" />
+                            <BsFillPencilFill color="blue" />
                           </button>
                         </td>
-                      )}
-                      <td className="py-4 px-6 text-sm font-medium whitespace-nowrap mr-auto ml-auto">
-                        <button
-                          className="text-blue-600 dark:text-blue-500 hover:underline ml-2 mr-2"
-                          onClick={() => handleEditItem(item)}
-                        >
-                          <BsFillPencilFill color="blue" />
-                        </button>
-                      </td>
-                      <td className="py-4 px-6 text-sm font-medium whitespace-nowrap mr-auto ml-auto">
-                        <button
-                          className="text-blue-600 dark:text-blue-500 hover:underline ml-2 mr-2"
-                          onClick={() => handleDeleteItem(item)}
-                        >
-                          <AiFillDelete color="red" />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                        <td className="py-4 px-6 text-sm font-medium whitespace-nowrap mr-auto ml-auto">
+                          <button
+                            className="text-blue-600 dark:text-blue-500 hover:underline ml-2 mr-2"
+                            onClick={() => handleDeleteItem(item)}
+                          >
+                            <AiFillDelete color="red" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <p>No data!</p>
+                )}
               </tbody>
             </table>
+            <div>
+            <Pagination
+                currentPage={currentPage}
+                itemsPerPage={itemsPerPage}
+                totalItems={currentItems.length}
+                paginateBack={paginateBack}
+                paginateFront={paginateFront}
+                
+              />
+            </div>
           </div>
         </div>
       </div>

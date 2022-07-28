@@ -2,14 +2,32 @@ import axiosInstance from "../helpers/axios";
 import { categoryConstants } from "./constants";
 import Swal from "sweetalert2";
 
-export const getAllCategories = () => {
+export const getCategoriesPaginate = (page, perPage) => {
   return async (dispatch) => {
-    alert("getting all categories");
-
     dispatch({
       type: categoryConstants.GET_ALL_REQUEST,
     });
-    const res = await axiosInstance.get("/category/getCategories/1/3");
+    const res = await axiosInstance.get(`/category/getCategories/${page}/${perPage}`);
+    if (res.status === 200) {
+      const { categoryList } = res.data;
+      dispatch({
+        type: categoryConstants.GET_ALL_SUCCESS,
+        payload: { categories: categoryList },
+      });
+    } else {
+      dispatch({
+        type: categoryConstants.GET_ALL_FAILURE,
+        payload: { error: res?.data?.error },
+      });
+    }
+  };
+}
+export const getAllCategories = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: categoryConstants.GET_ALL_REQUEST,
+    });
+    const res = await axiosInstance.get("/category/getCategories");
     if (res.status === 200) {
       const { categoryList } = res.data;
       dispatch({
