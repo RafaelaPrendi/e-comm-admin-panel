@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { IoAddOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCategory, getAllCategories, getCategoriesPaginate } from "../../actions";
+import {
+  deleteCategory,
+  getAllCategories,
+  getCategoriesPaginate,
+} from "../../actions";
 import Layout from "../../components/Layout/Layout";
 import Table from "../../components/UI/Table/Table";
 import Swal from "sweetalert2";
@@ -18,8 +22,8 @@ const Categories = () => {
     parentId: "",
   };
 
-  useEffect(()=> {
-    dispatch(getAllCategories());
+  useEffect(() => {
+    dispatch(getCategoriesPaginate(1, 5));
   }, [dispatch]);
 
   const categories = useSelector((state) => state.category.categories);
@@ -29,7 +33,6 @@ const Categories = () => {
   const [editCategory, setEditCategory] = useState(initCategory);
   const [showModal, setShowModal] = useState(false);
   // const [currentItems, setCurrentItems] = useState([]);
-
 
   const handleAddCategory = () => {
     setNewCategory(initCategory);

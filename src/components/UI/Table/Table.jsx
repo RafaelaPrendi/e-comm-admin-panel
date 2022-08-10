@@ -5,7 +5,7 @@ import "./Table.scss";
 import Pagination from "../Pagination";
 import { CATEGORY, ORDER, PRODUCT } from "../../../actions/constants";
 import { useDispatch, useSelector } from "react-redux";
-
+import { getCategoriesPaginate } from "../../../actions";
 
 const Table = (props) => {
   const {
@@ -21,31 +21,51 @@ const Table = (props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [tableData, setTableData] = useState([]);
   const dispatch = useDispatch();
+  const categories = useSelector((state) => state.category.categories);
 
+  //manage pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(3);
+  const [isDataEmpty, setIsDataEmpty] = useState(false);
 
-    //manage pagination
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(5);
-    // Get current posts
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-      // Change page
-    const paginateFront = () => setCurrentPage(currentPage + 1);
-    const paginateBack = () => setCurrentPage(currentPage - 1);
-  
-    const getMoreItems = () => {
-      if(dataType === CATEGORY){
+  // Get current posts
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-        dispatch()
-        setTableData
-      }else if(dataType === PRODUCT){
-
-      }else if(dataType === ORDER){
-
-      }
+  const [currentItems, setCurrentItems] = useState(
+    categories.slice(indexOfFirstItem, indexOfLastItem)
+  );
+  // Change page
+  const paginateFront = () => {
+    if (currentItems.length === 0) {
+      getMoreItems();
     }
-    console.log("current page=", currentPage, "curr itm=", currentItems, "items per page", itemsPerPage )
+    if (categories.length < indexOfLastItem - indexOfFirstItem) {
+      setCurrentItems(categories);
+    }
+    setCurrentPage(currentPage + 1);
+  };
+  const paginateBack = () => setCurrentPage(currentPage - 1);
+
+  const getMoreItems = () => {
+    if (dataType === CATEGORY) {
+      dispatch(getCategoriesPaginate(currentPage, itemsPerPage));
+
+      // setTableData
+    } else if (dataType === PRODUCT) {
+    } else if (dataType === ORDER) {
+    }
+  };
+  console.log(
+    "current page=",
+    currentPage,
+    "curr itm=",
+    currentItems,
+    "categories",
+    categories,
+    categories.length < indexOfLastItem - indexOfFirstItem,
+    indexOfLastItem - indexOfFirstItem
+  );
 
   useEffect(() => {
     const filtered = data.filter((item) => {
@@ -59,7 +79,9 @@ const Table = (props) => {
     });
     setTableData(filtered);
   }, [data, searchTerm]);
-
+  useEffect(() => {
+    setCurrentItems(categories.slice(indexOfFirstItem, indexOfLastItem));
+  }, [categories, currentItems, indexOfFirstItem, indexOfLastItem]);
   const renderSubCategories = (item, key, index) => {
     let jsx = [];
     if (key === "_id") jsx.push(<span key={index}>{index + 1}</span>);
@@ -163,7 +185,7 @@ const Table = (props) => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                {currentItems.length > 0 ? (
+                {categories.length > 0 ? (
                   currentItems.map((item, index) => {
                     return (
                       <tr
@@ -216,18 +238,18 @@ const Table = (props) => {
                     );
                   })
                 ) : (
-                  <p>No data!</p>
+                  <p className="p-2 m-6">Nuk ka me te dhena!</p>
                 )}
               </tbody>
             </table>
             <div>
-            <Pagination
+              <Pagination
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
                 totalItems={currentItems.length}
                 paginateBack={paginateBack}
                 paginateFront={paginateFront}
-                
+                getMoreItems={getMoreItems}
               />
             </div>
           </div>

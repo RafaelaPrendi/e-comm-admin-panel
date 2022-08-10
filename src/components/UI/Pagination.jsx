@@ -1,14 +1,8 @@
 import React from "react";
 
 const Pagination = (props) => {
-    const {
-        currentPage,
-        itemsPerPage,
-        totalItems,
-        paginateBack,
-        paginateFront} = props;
-    console.log("current page=", currentPage, "curr itm=", totalItems, "items per page", itemsPerPage , "from comp")
-
+  const { currentPage, itemsPerPage, totalItems, paginateBack, paginateFront } =
+    props;
   return (
     <div className="py-2">
       <div>
