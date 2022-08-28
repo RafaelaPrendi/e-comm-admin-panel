@@ -25,32 +25,29 @@ const Table = (props) => {
 
   //manage pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(3);
+  const [itemsPerPage] = useState(5);
   const [isDataEmpty, setIsDataEmpty] = useState(false);
 
   // Get current posts
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-  const [currentItems, setCurrentItems] = useState(
-    categories.slice(indexOfFirstItem, indexOfLastItem)
-  );
+
+  useEffect(() => {
+    dispatch(getCategoriesPaginate(currentPage, itemsPerPage));
+  }, []);
+
   // Change page
   const paginateFront = () => {
-    if (currentItems.length === 0) {
-      getMoreItems();
-    }
-    if (categories.length < indexOfLastItem - indexOfFirstItem) {
-      setCurrentItems(categories);
-    }
+    getMoreItems();
     setCurrentPage(currentPage + 1);
   };
   const paginateBack = () => setCurrentPage(currentPage - 1);
 
   const getMoreItems = () => {
+    console.log(currentPage, itemsPerPage, "on get more")
+    dispatch(getCategoriesPaginate(currentPage, itemsPerPage));
     if (dataType === CATEGORY) {
-      dispatch(getCategoriesPaginate(currentPage, itemsPerPage));
-
       // setTableData
     } else if (dataType === PRODUCT) {
     } else if (dataType === ORDER) {
@@ -60,11 +57,11 @@ const Table = (props) => {
     "current page=",
     currentPage,
     "curr itm=",
-    currentItems,
+    // currentItems,
     "categories",
     categories,
-    categories.length < indexOfLastItem - indexOfFirstItem,
-    indexOfLastItem - indexOfFirstItem
+    indexOfFirstItem,
+    indexOfLastItem
   );
 
   useEffect(() => {
@@ -79,9 +76,7 @@ const Table = (props) => {
     });
     setTableData(filtered);
   }, [data, searchTerm]);
-  useEffect(() => {
-    setCurrentItems(categories.slice(indexOfFirstItem, indexOfLastItem));
-  }, [categories, currentItems, indexOfFirstItem, indexOfLastItem]);
+
   const renderSubCategories = (item, key, index) => {
     let jsx = [];
     if (key === "_id") jsx.push(<span key={index}>{index + 1}</span>);
@@ -186,7 +181,7 @@ const Table = (props) => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                 {categories.length > 0 ? (
-                  currentItems.map((item, index) => {
+                  categories.map((item, index) => {
                     return (
                       <tr
                         className="hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -246,10 +241,9 @@ const Table = (props) => {
               <Pagination
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
-                totalItems={currentItems.length}
+                totalItems={categories.length}
                 paginateBack={paginateBack}
                 paginateFront={paginateFront}
-                getMoreItems={getMoreItems}
               />
             </div>
           </div>

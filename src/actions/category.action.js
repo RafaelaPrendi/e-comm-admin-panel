@@ -3,6 +3,7 @@ import { categoryConstants } from "./constants";
 import Swal from "sweetalert2";
 
 export const getCategoriesPaginate = (page, perPage) => {
+
   return async (dispatch) => {
     dispatch({
       type: categoryConstants.GET_ALL_REQUEST,
@@ -10,6 +11,7 @@ export const getCategoriesPaginate = (page, perPage) => {
     const res = await axiosInstance.get(`/category/getCategories/${page}/${perPage}`);
     if (res.status === 200) {
       const { categoryList } = res.data;
+      console.log(categoryList, "after call", res)
       dispatch({
         type: categoryConstants.GET_ALL_SUCCESS,
         payload: { categories: categoryList },

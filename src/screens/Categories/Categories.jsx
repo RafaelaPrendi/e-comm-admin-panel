@@ -12,6 +12,9 @@ import Swal from "sweetalert2";
 import "./Categories.scss";
 import NewCategory from "./NewCategory";
 import { CATEGORY } from "../../actions/constants";
+import MUIDataTable from "mui-datatables";
+import InfoIcon from '@mui/icons-material/Info';
+import EditIcon from '@mui/icons-material/Edit';
 
 const Categories = () => {
   const dispatch = useDispatch();
@@ -58,6 +61,44 @@ const Categories = () => {
     setShowModal(true);
     setEditCategory(category);
   };
+  const options = {
+    filter: true,
+    filterType: 'dropdown',
+    responsive: 'standard'
+  };
+  const columns = ["#", "Emri",   {
+    name: "Detajet",
+    options: {
+      filter: true,
+      customBodyRender: (value, tableMeta, updateValue) => {
+        return (
+          <InfoIcon/>
+        );
+      },
+    }
+  },
+  {
+    name: "Edito",
+    options: {
+      filter: true,
+      customBodyRender: (value, tableMeta, updateValue) => {
+        return (
+          <EditIcon/>
+        );
+      },
+    }
+  },
+];
+  const getTableRows = () => {
+    let rows = [];
+    for (let index = 0; index < categories.length; index++) {
+      rows.push([index+1,categories[index].name ])
+      // const element = categories[index];
+      
+    }
+    console.log(categories);
+    return rows;
+  }
   return (
     <Layout sidebar={true}>
       {showModal ? (
@@ -73,9 +114,6 @@ const Categories = () => {
       ) : (
         <div className="categoriesContainer">
           <div className="flex flex-row titleContainer">
-            <h2 className="text-2xl leading-9 font-bold tracking-tight text-gray-700 sm:text-4xl sm:leading-10">
-              Kategorite
-            </h2>
             <button
               className="inline-flex hover:bg-gray-700 text-white font-semibold text-lg py-2 px-4 border rounded shadow"
               style={{ backgroundColor: "#16c79a" }}
@@ -86,23 +124,24 @@ const Categories = () => {
             </button>
           </div>
           <div className="flex flex-col mt-4">
-            {categories.length > 0 ? (
-              <Table
-                colHeader={["#", "Emri", "Nen Kategori"]}
-                data={categories}
-                dataType={CATEGORY}
-                showDetailsColumn={false}
-                setShowModal={setShowModal}
-                isCategoryData={true}
-                handleDeleteItem={handleDeleteCategory}
-                handleEditItem={handleEditCategory}
-                handlePagination={getCategoriesPaginate}
-                // currentPage={currentPage}
-                // itemsPerPage={itemsPerPage}
-                // totalItems={currentItems.length}
-                // paginateBack={paginateBack}
-                // paginateFront={paginateFront}
-              />
+            {categories && categories.length > 0 ? (
+               <MUIDataTable title={"Lista e Kategorive"} data={getTableRows()} columns={columns} options={options} />
+              // <Table
+              //   colHeader={["#", "Emri"]}
+              //   data={categories}
+              //   dataType={CATEGORY}
+              //   showDetailsColumn={false}
+              //   setShowModal={setShowModal}
+              //   isCategoryData={true}
+              //   handleDeleteItem={handleDeleteCategory}
+              //   handleEditItem={handleEditCategory}
+              //   handlePagination={getCategoriesPaginate}
+              //   // currentPage={currentPage}
+              //   // itemsPerPage={itemsPerPage}
+              //   // totalItems={currentItems.length}
+              //   // paginateBack={paginateBack}
+              //   // paginateFront={paginateFront}
+              // />
             ) : (
               <h2 className="text-center text-red">Error fetching data.</h2>
             )}
