@@ -11,7 +11,7 @@ export const getCategoriesPaginate = (page, perPage) => {
     const res = await axiosInstance.get(`/category/getCategories/${page}/${perPage}`);
     if (res.status === 200) {
       const { categoryList } = res.data;
-      console.log(categoryList, "after call", res)
+      // console.log(categoryList, "after call", res)
       dispatch({
         type: categoryConstants.GET_ALL_SUCCESS,
         payload: { categories: categoryList },

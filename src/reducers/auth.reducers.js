@@ -17,8 +17,8 @@ const initialState = {
   message: "",
 };
 const authReducer = (state = initialState, action) => {
-  console.log("ACTION=", action);
-  console.log(state, "STATE");
+  // console.log("ACTION=", action);
+  // console.log(state, "STATE");
   switch (action.type) {
     case authConstants.LOGIN_REQUEST:
       state = {

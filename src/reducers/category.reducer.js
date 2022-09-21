@@ -9,7 +9,7 @@ const initialState = {
   error: null,
 };
 const categoryReducer = (state = initialState, action) => {
-  console.log(action, "ACTION CAT");
+  // console.log(action, "ACTION CAT");
   switch (action.type) {
     // GET REQUEST
     case categoryConstants.GET_ALL_REQUEST:
